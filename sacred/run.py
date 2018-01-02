@@ -272,6 +272,8 @@ class Run(object):
         if self._heartbeat is not None:
             self._heartbeat.cancel()
         self._heartbeat = None
+        # prevent race condition where an uncompleted heartbeat starts a new Timer
+        self.beat_interval = 0 
         self._emit_heartbeat()  # one final beat to flush pending changes
 
     def _emit_queued(self):
